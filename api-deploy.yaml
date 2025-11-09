@@ -12,6 +12,8 @@ spec:
       labels:
         app: k8s-demo-api
     spec:
+      nodeSelector:
+        kubernetes.io/hostname: worker-node
       containers:
       - name: k8s-demo-api
         image: iuad16s1/test-api:latest
