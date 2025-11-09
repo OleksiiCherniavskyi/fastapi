@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: k8s-demo-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: k8s-demo-api
+  template:
+    metadata:
+      labels:
+        app: k8s-demo-api
+    spec:
+      containers:
+      - name: k8s-demo-api
+        image: iuad16s1/test-api:latest
+        ports:
+        - containerPort: 8000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: k8s-demo-api
+spec:
+  type: NodePort
+  selector:
+    app: k8s-demo-api
+  ports:
+  - port: 8000
+    targetPort: 8000
+    nodePort: 30080
+
