@@ -64,3 +64,34 @@ def delete_item(item_id: int):
     del items_db[item_id]
     return {"message": f"Item {item_id} deleted successfully."}
 
+# ----------------------------------------------------------
+#                HEAD & OPTIONS ENDPOINTS
+# ----------------------------------------------------------
+
+# ---- HEAD for collection ----
+@app.head("/items", tags=["HEAD/OPTIONS"])
+def head_items(response: Response):
+    response.headers["X-Total-Count"] = str(len(items_db))
+    return Response(status_code=200)
+
+# ---- HEAD for specific item ----
+@app.head("/items/{item_id}", tags=["HEAD/OPTIONS"])
+def head_item(item_id: int, response: Response):
+    if item_id not in items_db:
+        return Response(status_code=404)
+    response.headers["X-Item-Exists"] = "true"
+    return Response(status_code=200)
+
+# ---- OPTIONS for collection ----
+@app.options("/items", tags=["HEAD/OPTIONS"])
+def options_items():
+    return {
+        "allowed_methods": ["GET", "POST", "HEAD", "OPTIONS"]
+    }
+
+# ---- OPTIONS for specific item ----
+@app.options("/items/{item_id}", tags=["HEAD/OPTIONS"])
+def options_item():
+    return {
+        "allowed_methods": ["GET", "PUT", "DELETE", "HEAD", "OPTIONS"]
+    }
